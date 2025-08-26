@@ -1,0 +1,7 @@
+[
+  {"account":"Ops","issue":"VPN down for all remote users. Error 809."},
+  {"account":"Sales","issue":"Cannot login to CRM, MFA loop after password reset."},
+  {"account":"Billing","issue":"Invoice report totals mismatch for March."},
+  {"account":"Support","issue":"Customer app crashes on iOS 17.4 when uploading photo."},
+  {"account":"Security","issue":"Suspected phishing email with internal branding."}
+]

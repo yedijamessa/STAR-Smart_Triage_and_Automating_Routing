@@ -1,0 +1,144 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: left;        /* 👈 force left alignment */
+}
+
+
+.logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: linear-gradient(...);
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.explain-ai {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  color: #ccc;
+  max-width: 600px;
+}
+
+.explain-ai h3 {
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 1100px) {
+  .two-col {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Lists inside AI text */
+.rich ol,
+.rich .rich-list {
+  margin: 6px 0;
+  padding-left: 18px;
+}
+.rich li { margin: 4px 0; }
+
+/* Section dividers */
+.section {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin-top: 14px;
+  padding-top: 12px;
+}
+
+/* Badges / chips */
+.badge {
+  display:inline-block; padding:4px 8px; border-radius:8px; font-size:12px; font-weight:600;
+  background: rgba(255,255,255,0.06);
+}
+.badge.green { background: rgba(16,185,129,.15); color: #34d399; }
+.badge.amber { background: rgba(245,158,11,.15); color: #fbbf24; }
+.badge.red   { background: rgba(239,68,68,.15);  color: #f87171; }
+
+/* Progress bar for similarity */
+.meter { height: 8px; border-radius: 8px; background: rgba(255,255,255,0.06); overflow: hidden; }
+.meter > span { display:block; height:100%; background: linear-gradient(90deg,#22d3ee,#818cf8); }
+
+/* Make section headers bold & spaced so they stand out */
+.summary-section {
+  border-top: 1px solid rgba(255,255,255,0.10);
+  padding: 12px 0;
+}
+
+.summary-title {
+  font-weight: 800;             /* <-- bold titles */
+  margin-bottom: 6px;
+  color: rgba(255,255,255,.9);
+}
+
+.summary-value {
+  font-weight: 600;             /* content slightly lighter than title */
+  color: rgba(255,255,255,.9);
+}
+
+/* Two-column layout on wide screens */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 1100px) {
+  .two-col { grid-template-columns: 1fr 1fr; }
+}
+
+/* Similarity meter */
+.meter { height: 8px; border-radius: 8px; background: rgba(255,255,255,0.06); overflow: hidden; }
+.meter > span { display:block; height:100%; background: linear-gradient(90deg,#22d3ee,#818cf8); }
+
+/* Badges */
+.badge { display:inline-block; padding:4px 8px; border-radius:8px; font-size:12px; font-weight:700;
+  background: rgba(255,255,255,0.06); }
+.badge.green { background: rgba(16,185,129,.15); color:#34d399; }
+.badge.amber { background: rgba(245,158,11,.15); color:#fbbf24; }
+.badge.red   { background: rgba(239,68,68,.15);  color:#f87171; }
+
+/* Header brand alignment (keeps logo tight) */
+.header .brand { display:flex; align-items:center; gap:12px; }
+.header .brand > img { width:40px; height:40px; border-radius:10px; object-fit:contain; flex:0 0 40px; }
+
+.rich p,
+.rich li {
+  text-align: justify;     /* makes long text aligned on both sides */
+}

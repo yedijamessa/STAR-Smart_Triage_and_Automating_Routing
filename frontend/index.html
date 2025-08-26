@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LLM Triage – React</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg:#0b1020;
+        --surface:#0e1628;
+        --card:#0f1a2e;
+        --muted:#9aa8bf;
+        --text:#e8edf7;
+        --ring:#4cc9f0;
+        --primary:#6aa7ff;
+        --ok:#22c55e;
+        --warn:#f59e0b;
+        --bad:#ef4444;
+        --border: rgba(154, 168, 191, 0.18);
+        --shadow: 0 10px 30px rgba(0,0,0,.35);
+        --radius: 16px;
+      }
+
+      *{ box-sizing:border-box }
+      html, body, #root { height: 100% }
+      body{
+        margin:0;
+        color:var(--text);
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji','Segoe UI Emoji';
+        background:
+          radial-gradient(1200px 600px at 0% -10%, #15233f 0%, transparent 60%),
+          radial-gradient(1200px 600px at 100% -20%, #0e2342 0%, transparent 60%),
+          linear-gradient(#091225, #0b1020);
+      }
+
+      /* Layout */
+      .container{
+        max-width: clamp(1080px, 92vw, 1440px);
+        margin: 0 auto;
+        padding: clamp(16px, 2.5vw, 32px);
+      }
+      /* Summary below main content */
+      .container > .card {
+        margin-top: 20px;
+      }
+
+
+      .header{ display:flex; align-items:center; justify-content:space-between; margin:8px 0 20px }
+      .brand{ display:flex; gap:12px; align-items:center }
+      .logo{ width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg,#38bdf8,#a78bfa); filter:drop-shadow(0 8px 28px rgba(56,189,248,.35)) }
+      .title{ font-weight:800; font-size:22px; letter-spacing:.2px }
+
+      .main{
+        display:grid; gap:20px;
+        grid-template-columns: 1fr;
+        align-items:start;
+      }
+      @media (min-width: 1024px){
+        /* Left column grows; right column stays in a comfy range */
+        .main{
+          grid-template-columns:
+            minmax(640px, 1fr)
+            clamp(360px, 32vw, 520px);
+        }
+      }
+      @media (min-width: 1440px){
+        /* Give more breathing room on ultrawide without letting the right bar explode */
+        .main{
+          grid-template-columns:
+            minmax(760px, 1fr)
+            clamp(420px, 28vw, 560px);
+        }
+      }
+
+
+      .right-sticky{
+        position: sticky; top: 20px;
+        height: calc(100dvh - 40px);  /* device viewport height for better iPad/Safari behavior */
+        display: grid; gap: 16px;
+        grid-auto-rows: min-content;
+        overflow: hidden; /* children scroll */
+      }
+
+
+      /* Cards */
+      .card{
+        background: linear-gradient(180deg, rgba(148,163,184,.06), transparent), var(--card);
+        border:1px solid var(--border);
+        border-radius: var(--radius);
+        padding:18px;
+        box-shadow: var(--shadow);
+      }
+      .card h3{
+        margin:0 0 10px;
+        font-size: clamp(15px, 1.4vw, 18px);
+        font-weight:700;
+      }
+
+      .subtle{ color:var(--muted); font-size:12px }
+
+      /* Form */
+      label{ font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.12em }
+      input, textarea, select{
+        width:100%; margin-top:8px;
+        border:1px solid rgba(154, 168, 191, 0.28);
+        background: var(--surface);
+        color: var(--text);
+        border-radius: 12px;
+        padding:11px 12px; outline:none;
+      }
+      input:focus, textarea:focus, select:focus{
+        border-color: var(--ring);
+        box-shadow: 0 0 0 3px rgba(76,201,240,.15)
+      }
+
+      .row{ display:grid; gap:12px }
+      @media (min-width:720px){ .row{ grid-template-columns:1fr 1fr } }
+
+      .btns{ display:flex; gap:10px; flex-wrap:wrap }
+      .btn{
+        border:1px solid rgba(154, 168, 191, 0.28);
+        background: var(--surface);
+        color: var(--text);
+        padding:10px 14px;
+        border-radius: 12px;
+        cursor:pointer; font-weight:700
+      }
+      .btn.primary{ background: linear-gradient(135deg,#2563eb,#38bdf8); border-color:transparent }
+      .btn:disabled{ opacity:.6; cursor:not-allowed }
+
+      /* Steps (compact chips) */
+      .steps{ display:grid; gap:8px }
+      .chip{
+        background:#0b1527; border:1px solid rgba(154,168,191,.2);
+        border-radius:12px; padding:10px 12px; font-size:13px; font-weight:600;
+      }
+      .chip .dot{
+        width:10px; height:10px; border-radius:999px; display:inline-block; margin-right:8px;
+      }
+      .intake .dot{ background:#60a5fa }
+      .understanding .dot{ background:#a78bfa }
+      .prioritization .dot{ background:#f59e0b }
+      .routing .dot{ background:#22c55e }
+      .knowledge .dot{ background:#38bdf8 }
+      .resolution .dot{ background:#ef4444 }
+      .done .dot{ background:#94a3b8 }
+      .error .dot{ background:#ef4444 }
+
+      /* KPIs */
+      /* Allow KPIs in Summary to fit more per row */
+      .kpis {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 10px;
+      }
+
+
+      .kpi{
+        background: var(--surface);
+        border:1px solid var(--border);
+        border-radius: 12px; padding:10px 12px
+      }
+      .kpi .label{ color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.12em }
+      .kpi .value{ font-size:18px; font-weight:800 }
+
+      /* Scrollable content areas to avoid overlap */
+      /* Generic scroll helper used in cards */
+      .scroll{
+        overflow:auto;
+        padding-right: 6px;
+      }
+      .scroll::-webkit-scrollbar{ width:10px }
+      .scroll::-webkit-scrollbar-thumb{ background:rgba(154,168,191,.25); border-radius:999px }
+
+      /* Specific heights so content never fights for space.
+        First scroll list (Steps) roughly 40% of the rail, Summary lists use the rest. */
+      .right-sticky .card:first-child .scroll{
+        max-height: calc(0.40 * (100dvh - 40px) - 110px); /* minus header paddings & title area */
+      }
+      .right-sticky .card + .card .tickets-list.scroll{
+        max-height: calc(0.50 * (100dvh - 40px) - 140px);
+      }
+      .right-sticky .card + .card .code.scroll{
+        max-height: calc(0.24 * (100dvh - 40px));
+      }
+
+      .tickets-list{ display:grid; gap:10px }
+      .ticket{
+        background: var(--surface);
+        border:1px solid var(--border);
+        border-radius: 12px; padding:10px 12px;
+      }
+
+      .code{
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        white-space: pre-wrap;
+        word-break: break-word;
+        line-height: 1.5;
+      }
+
+      .pill{
+        display:inline-flex; align-items:center; gap:8px;
+        padding:8px 12px; border-radius:999px;
+        border:1px solid var(--border); background: var(--surface);
+        color:var(--text); font-size:12px
+      }
+      /* Rich text styling for auto-response / resolution */
+      .rich { white-space: normal; line-height: 1.6; }
+      .rich-p { margin: 0 0 10px; }
+      .rich-h { margin: 14px 0 8px; font-size: 14px; font-weight: 800; letter-spacing: .02em; }
+      .rich-list { margin: 6px 0 12px 1.25rem; padding-left: 1.25rem; }
+      .rich-list li { margin: 4px 0; }
+      .rich strong { font-weight: 800; }
+
+    </style>
+
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
