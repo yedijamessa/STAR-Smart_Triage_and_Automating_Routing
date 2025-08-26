@@ -1,5 +1,7 @@
 # 🌟 STAR: Smart Triage & Automated Routing
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16953764.svg)](https://doi.org/10.5281/zenodo.16953764)
+
 **STAR** (Smart Triage & Automated Routing) is an **LLM-powered triage system** for classifying, prioritising, and routing IT support tickets.  
 It leverages **Large Language Models (LLMs)**, **retrieval-augmented generation (RAG)**, and explainable AI to provide automated support with transparency.
 
