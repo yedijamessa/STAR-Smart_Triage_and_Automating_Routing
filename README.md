@@ -51,7 +51,7 @@ pip install -r requirements.txt
 
 Run backend:
 ```bash
-python app.py
+uvicorn main:app --reload --port 8000
 ```
 
 ### 3. Frontend Setup (React + TypeScript)
